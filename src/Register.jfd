@@ -5,6 +5,7 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 			name: "this"
+			"$sizePolicy": 1
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button1"
 				"text": "Register"
