@@ -3,16 +3,16 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import java.awt.*;
 import javax.swing.*;
 /*
- * Created by JFormDesigner on Fri Dec 27 17:41:36 ICT 2024
+ * Created by JFormDesigner on Fri Dec 27 18:25:22 WIB 2024
  */
 
 
 
 /**
- * @author Dellass
+ * @author RICKARDO
  */
-public class Login extends JPanel {
-    public Login() {
+public class PemesananTiket extends JFrame {
+    public PemesananTiket() {
         try {
             UIManager.setLookAndFeel(new FlatMacDarkLaf());
         } catch (UnsupportedLookAndFeelException e) {
@@ -25,34 +25,38 @@ public class Login extends JPanel {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         // Generated using JFormDesigner Evaluation license - Rickardo Satrio
+        button1 = new JButton();
 
         //======== this ========
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder
-        ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border
-        .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt
-        . Color .red ) , getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void
-        propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( )
-        ;} } );
-        setLayout(null);
+        var contentPane = getContentPane();
+        contentPane.setLayout(null);
+
+        //---- button1 ----
+        button1.setText("BATAK");
+        contentPane.add(button1);
+        button1.setBounds(new Rectangle(new Point(170, 205), button1.getPreferredSize()));
 
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
-            for(int i = 0; i < getComponentCount(); i++) {
-                Rectangle bounds = getComponent(i).getBounds();
+            for(int i = 0; i < contentPane.getComponentCount(); i++) {
+                Rectangle bounds = contentPane.getComponent(i).getBounds();
                 preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                 preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
             }
-            Insets insets = getInsets();
+            Insets insets = contentPane.getInsets();
             preferredSize.width += insets.right;
             preferredSize.height += insets.bottom;
-            setMinimumSize(preferredSize);
-            setPreferredSize(preferredSize);
+            contentPane.setMinimumSize(preferredSize);
+            contentPane.setPreferredSize(preferredSize);
         }
+        setSize(400, 300);
+        setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     // Generated using JFormDesigner Evaluation license - Rickardo Satrio
+    private JButton button1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

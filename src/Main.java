@@ -2,8 +2,8 @@ public class Main {
     public static void main(String[] args)
     {
         
-        Register register = new Register();
-        register.setVisible(true);
+        PemesananTiket pemesananTiket = new PemesananTiket();
+        pemesananTiket.setVisible(true);
 
     }
 }
