@@ -1,3 +1,5 @@
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+
 import java.awt.*;
 import javax.swing.*;
 /*
@@ -11,6 +13,12 @@ import javax.swing.*;
  */
 public class Register extends JFrame {
     public Register() {
+        try {
+            UIManager.setLookAndFeel(new FlatMacDarkLaf());
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        SwingUtilities.updateComponentTreeUI(this);
         initComponents();
     }
 
