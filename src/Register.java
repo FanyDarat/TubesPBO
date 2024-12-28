@@ -1,5 +1,3 @@
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
-
 import java.awt.*;
 import javax.swing.*;
 /*
@@ -13,18 +11,12 @@ import javax.swing.*;
  */
 public class Register extends JFrame {
     public Register() {
-        try {
-            UIManager.setLookAndFeel(new FlatMacDarkLaf());
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-        SwingUtilities.updateComponentTreeUI(this);
         initComponents();
     }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        // Generated using JFormDesigner Evaluation license - Della Silvira
+        // Generated using JFormDesigner Evaluation license - Rafael Abednego
         button1 = new JButton();
 
         //======== this ========
@@ -56,7 +48,7 @@ public class Register extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - Della Silvira
+    // Generated using JFormDesigner Evaluation license - Rafael Abednego
     private JButton button1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }
