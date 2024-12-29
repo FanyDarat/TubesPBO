@@ -7,14 +7,7 @@ public class DatabaseUtil {
     private static final String USER = "root";
     private static final String PASSWORD = "rafael123";
 
-    // Singleton Connection instance
-    private static Connection connection;
-
-    // Method to get the database connection
     public static Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        }
-        return connection;
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }
