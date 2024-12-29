@@ -31,10 +31,10 @@ public class User {
             preparedStatement.setString(4, telepon);
 
             int rowsInserted = preparedStatement.executeUpdate();
-            return rowsInserted > 0; // Return true if insertion was successful
+            return rowsInserted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Return false if an error occurs
+            return false;
         }
     }
 

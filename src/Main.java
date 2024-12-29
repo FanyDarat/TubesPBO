@@ -12,7 +12,7 @@ public class Main {
             System.out.println("3. Exit");
             System.out.print("Pilih Opsi di Atas: ");
             int choice = scanner.nextInt();
-            scanner.nextLine();  // Clear the buffer
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -54,7 +54,6 @@ public class Main {
                     break;
 
                 case 3:
-                    // Exit
                     System.out.println("Goodbye!");
                     exit = true;
                     break;
@@ -64,7 +63,5 @@ public class Main {
                     break;
             }
         }
-
-        scanner.close();
     }
 }
