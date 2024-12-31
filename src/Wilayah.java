@@ -5,7 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Wilayah {
+public class Wilayah implements DatabaseUtil {
+
     private int wilayahID;
     private String nama;
 
@@ -28,14 +29,12 @@ public class Wilayah {
         this.nama = nama;
     }
 
-    // Metode statis untuk operasi database
-
     // Metode untuk mendapatkan semua nama wilayah
     public static List<String> getSemuaNamaWilayah() {
         List<String> namaWilayah = new ArrayList<>();
         String query = "SELECT nama FROM wilayah";
 
-        try (Connection connection = DatabaseUtil.getConnection();
+        try (Connection connection = new Wilayah(0, null).getConnection(); // Menggunakan getConnection() dari interface
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
 
@@ -54,7 +53,7 @@ public class Wilayah {
     public static boolean tambahWilayah(String nama) {
         String query = "INSERT INTO wilayah (nama) VALUES (?)";
 
-        try (Connection connection = DatabaseUtil.getConnection();
+        try (Connection connection = new Wilayah(0, null).getConnection(); // Menggunakan getConnection() dari interface
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, nama);
@@ -69,41 +68,39 @@ public class Wilayah {
     }
 
     // Metode untuk melakukan update nama wilayah
-public static boolean updateWilayah(String namaLama, String namaBaru) {
-    String query = "UPDATE wilayah SET nama = ? WHERE nama = ?";
+    public static boolean updateWilayah(String namaLama, String namaBaru) {
+        String query = "UPDATE wilayah SET nama = ? WHERE nama = ?";
 
-    try (Connection connection = DatabaseUtil.getConnection();
-         PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = new Wilayah(0, null).getConnection(); // Menggunakan getConnection() dari interface
+            PreparedStatement statement = connection.prepareStatement(query)) {
 
-        statement.setString(1, namaBaru);
-        statement.setString(2, namaLama);
-        int barisDiperbarui = statement.executeUpdate();
-        return barisDiperbarui > 0;
+            statement.setString(1, namaBaru);
+            statement.setString(2, namaLama);
+            int barisDiperbarui = statement.executeUpdate();
+            return barisDiperbarui > 0;
 
-    } catch (SQLException e) {
-        e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
-    return false;
-}
+    // Metode untuk menghapus wilayah
+    public static boolean deleteWilayah(String namaWilayah) {
+        String query = "DELETE FROM wilayah WHERE nama = ?";
 
-// Metode untuk menghapus wilayah
-public static boolean deleteWilayah(String namaWilayah) {
-    String query = "DELETE FROM wilayah WHERE nama = ?";
+        try (Connection connection = new Wilayah(0, null).getConnection(); // Menggunakan getConnection() dari interface
+            PreparedStatement statement = connection.prepareStatement(query)) {
 
-    try (Connection connection = DatabaseUtil.getConnection();
-         PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, namaWilayah);
+            int barisDihapus = statement.executeUpdate();
+            return barisDihapus > 0;
 
-        statement.setString(1, namaWilayah);
-        int barisDihapus = statement.executeUpdate();
-        return barisDihapus > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return false;
     }
-
-    return false;
-}
-
-
 }

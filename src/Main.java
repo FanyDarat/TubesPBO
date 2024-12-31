@@ -73,12 +73,10 @@ public class Main {
                 System.out.println("2. Lihat Semua Wilayah");
 
                 if (loggedInUser.getRole() == 1) {
-                    // Admin menu options
                     System.out.println("3. Setting Wilayah");
                     System.out.println("4. Tambah Bioskop");
                     System.out.println("5. Lihat Bioskop Berdasarkan Wilayah");
                 } else {
-                    // Regular user menu options
                     System.out.println("3. Lihat Bioskop Berdasarkan Wilayah");
                 }
 
@@ -88,13 +86,11 @@ public class Main {
 
                 switch (choice) {
                     case 1:
-                        // Logout
                         System.out.println("Logout Berhasil!");
                         loggedInUser = null;
                         break;
 
                     case 2:
-                        // Lihat Semua Wilayah
                         List<String> semuaWilayah = Wilayah.getSemuaNamaWilayah();
                         System.out.println("Daftar Wilayah:");
                         if (semuaWilayah.isEmpty()) {
@@ -108,7 +104,6 @@ public class Main {
 
                     case 3:
                         if (loggedInUser.getRole() == 1) {
-                            // Admin: Setting Wilayah
                             System.out.println("\nSetting Wilayah");
                             System.out.println("1. Tambah Wilayah");
                             System.out.println("2. Update Wilayah");
@@ -119,7 +114,6 @@ public class Main {
 
                             switch (settingChoice) {
                                 case 1:
-                                    // Tambah Wilayah
                                     System.out.print("Masukkan Nama Wilayah: ");
                                     String namaWilayah = scanner.nextLine();
 
@@ -133,7 +127,6 @@ public class Main {
                                     break;
 
                                 case 2:
-                                    // Update Wilayah
                                     System.out.print("Masukkan Nama Wilayah yang ingin diupdate: ");
                                     String oldNamaWilayah = scanner.nextLine();
                                     System.out.print("Masukkan Nama Wilayah Baru: ");
@@ -149,7 +142,6 @@ public class Main {
                                     break;
 
                                 case 3:
-                                    // Hapus Wilayah
                                     System.out.print("Masukkan Nama Wilayah yang ingin dihapus: ");
                                     String namaWilayahHapus = scanner.nextLine();
 
@@ -171,7 +163,6 @@ public class Main {
 
                     case 4:
                         if (loggedInUser.getRole() == 1) {
-                            // Admin: Tambah Bioskop
                             System.out.print("Masukkan Nama Bioskop: ");
                             String namaBioskop = scanner.nextLine();
                             System.out.print("Masukkan Nama Wilayah: ");
@@ -191,11 +182,9 @@ public class Main {
 
                     case 5:
                         if (loggedInUser.getRole() == 1) {
-                            // Admin: Lihat Bioskop Berdasarkan Wilayah
                             System.out.print("Masukkan Nama Wilayah: ");
                             String wilayahNama = scanner.nextLine();
                     
-                            // Mendapatkan daftar bioskop berdasarkan nama wilayah
                             List<Bioskop> listBioskop = Bioskop.listBioskopByWilayah(wilayahNama);
                             
                             System.out.println("Daftar Bioskop di Wilayah " + wilayahNama + ":");

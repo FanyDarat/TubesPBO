@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class User {
+public class User implements DatabaseUtil {
     private int userID;
     private String username;
     private String email;
@@ -21,12 +21,11 @@ public class User {
         this.role = role;
     }
 
-    // Register user with password hashing
     public boolean registerUser(String username, String email, String password, String telepon) {
         String query = "INSERT INTO user(username, email, password, telepon) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = DatabaseUtil.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try ( // Menggunakan metode getConnection dari interface DatabaseUtil
+             PreparedStatement preparedStatement = getConnection().prepareStatement(query)) {
 
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());  // Hash the password
 
@@ -43,10 +42,9 @@ public class User {
         }
     }
 
-    // Login user with password checking
     public static User loginUser(String username, String password) {
         String query = "SELECT * FROM user WHERE username = ?";
-        try (Connection connection = DatabaseUtil.getConnection();
+        try (Connection connection = new User(0, null, null, null, null, 0).getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, username);
@@ -55,7 +53,6 @@ public class User {
             if (resultSet.next()) {
                 String storedHashedPassword = resultSet.getString("password");
 
-                // Check if the provided password matches the stored hashed password
                 if (BCrypt.checkpw(password, storedHashedPassword)) {
                     int userID = resultSet.getInt("id");
                     String email = resultSet.getString("email");
@@ -68,7 +65,7 @@ public class User {
         } catch (SQLException e) {
             System.err.println("SQL Error during login: " + e.getMessage());
         }
-        return null;  // Return null if login failed
+        return null;
     }
 
     public String getUsername() {
