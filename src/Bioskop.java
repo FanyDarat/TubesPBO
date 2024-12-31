@@ -28,12 +28,11 @@ public class Bioskop {
         return wilayahID;
     }
 
-    // Method untuk mendapatkan daftar bioskop berdasarkan nama wilayah
     public static List<Bioskop> listBioskopByWilayah(String wilayahNama) {
         List<Bioskop> bioskopList = new ArrayList<>();
-        String query = "SELECT b.id, b.nama, w.wilayahID " +
+        String query = "SELECT b.id, b.nama, w.id " +
                        "FROM bioskop b " +
-                       "JOIN wilayah w ON b.wilayahID = w.wilayahID " +
+                       "JOIN wilayah w ON b.wilayahID = w.id " +
                        "WHERE w.nama = ?";
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -45,7 +44,7 @@ public class Bioskop {
             while (resultSet.next()) {
                 int bioskopID = resultSet.getInt("id");
                 String namaBioskop = resultSet.getString("nama");
-                int wilayahID = resultSet.getInt("wilayahID");
+                int wilayahID = resultSet.getInt("id");
 
                 Bioskop bioskop = new Bioskop(bioskopID, namaBioskop, wilayahID);
                 bioskopList.add(bioskop);
@@ -58,7 +57,6 @@ public class Bioskop {
         return bioskopList;
     }
 
-    // Method untuk menambahkan bioskop baru
     public static boolean tambahBioskop(String namaBioskop, String namaWilayah) {
         String getWilayahIDQuery = "SELECT id FROM wilayah WHERE nama = ?";
         String insertBioskopQuery = "INSERT INTO bioskop (nama, wilayahID) VALUES (?, ?)";
@@ -88,7 +86,6 @@ public class Bioskop {
         return false;
     }
 
-    // Untuk menampilkan nama bioskop
     public static void tampilkanBioskopList(List<Bioskop> bioskopList) {
         if (bioskopList.isEmpty()) {
             System.out.println("Tidak ada bioskop yang terdaftar di wilayah ini.");
