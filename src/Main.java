@@ -74,9 +74,9 @@ public class Main {
 
                 if (loggedInUser.getRole() == 1) {
                     // Admin menu options
-                    System.out.println("3. Tambah Wilayah");
+                    System.out.println("3. Setting Wilayah");
                     System.out.println("4. Tambah Bioskop");
-                    System.out.println("5. Lihat Semua Bioskop");
+                    System.out.println("5. Lihat Bioskop Berdasarkan Wilayah");
                 } else {
                     // Regular user menu options
                     System.out.println("3. Lihat Bioskop Berdasarkan Wilayah");
@@ -108,30 +108,63 @@ public class Main {
 
                     case 3:
                         if (loggedInUser.getRole() == 1) {
-                            // Admin: Tambah Wilayah
-                            System.out.print("Masukkan Nama Wilayah: ");
-                            String namaWilayah = scanner.nextLine();
+                            // Admin: Setting Wilayah
+                            System.out.println("\nSetting Wilayah");
+                            System.out.println("1. Tambah Wilayah");
+                            System.out.println("2. Update Wilayah");
+                            System.out.println("3. Hapus Wilayah");
+                            System.out.print("Pilih Opsi: ");
+                            int settingChoice = scanner.nextInt();
+                            scanner.nextLine();
 
-                            boolean wilayahBerhasil = Wilayah.tambahWilayah(namaWilayah);
+                            switch (settingChoice) {
+                                case 1:
+                                    // Tambah Wilayah
+                                    System.out.print("Masukkan Nama Wilayah: ");
+                                    String namaWilayah = scanner.nextLine();
 
-                            if (wilayahBerhasil) {
-                                System.out.println("Wilayah berhasil ditambahkan!");
-                            } else {
-                                System.out.println("Gagal menambahkan wilayah. Silakan coba lagi.");
-                            }
-                        } else {
-                            // Regular user: Lihat Bioskop Berdasarkan Wilayah
-                            System.out.print("Masukkan Nama Wilayah: ");
-                            String wilayahNama = scanner.nextLine();
+                                    boolean wilayahBerhasil = Wilayah.tambahWilayah(namaWilayah);
 
-                            List<Bioskop> listBioskop = Bioskop.listBioskopByWilayah(wilayahNama);
-                            System.out.println("Daftar Bioskop di Wilayah " + wilayahNama + ":");
-                            if (listBioskop.isEmpty()) {
-                                System.out.println("Tidak ada bioskop yang terdaftar di wilayah ini.");
-                            } else {
-                                for (Bioskop bioskop : listBioskop) {
-                                    System.out.println("- " + bioskop.getNama());
-                                }
+                                    if (wilayahBerhasil) {
+                                        System.out.println("Wilayah berhasil ditambahkan!");
+                                    } else {
+                                        System.out.println("Gagal menambahkan wilayah. Silakan coba lagi.");
+                                    }
+                                    break;
+
+                                case 2:
+                                    // Update Wilayah
+                                    System.out.print("Masukkan Nama Wilayah yang ingin diupdate: ");
+                                    String oldNamaWilayah = scanner.nextLine();
+                                    System.out.print("Masukkan Nama Wilayah Baru: ");
+                                    String newNamaWilayah = scanner.nextLine();
+
+                                    boolean updateBerhasil = Wilayah.updateWilayah(oldNamaWilayah, newNamaWilayah);
+
+                                    if (updateBerhasil) {
+                                        System.out.println("Wilayah berhasil diupdate!");
+                                    } else {
+                                        System.out.println("Gagal mengupdate wilayah. Silakan coba lagi.");
+                                    }
+                                    break;
+
+                                case 3:
+                                    // Hapus Wilayah
+                                    System.out.print("Masukkan Nama Wilayah yang ingin dihapus: ");
+                                    String namaWilayahHapus = scanner.nextLine();
+
+                                    boolean deleteBerhasil = Wilayah.deleteWilayah(namaWilayahHapus);
+
+                                    if (deleteBerhasil) {
+                                        System.out.println("Wilayah berhasil dihapus!");
+                                    } else {
+                                        System.out.println("Gagal menghapus wilayah. Pastikan wilayah ada dan coba lagi.");
+                                    }
+                                    break;
+
+                                default:
+                                    System.out.println("Pilihan tidak valid.");
+                                    break;
                             }
                         }
                         break;
@@ -156,9 +189,9 @@ public class Main {
                         }
                         break;
 
-                        case 5:
+                    case 5:
                         if (loggedInUser.getRole() == 1) {
-                            // Admin: Lihat Semua Bioskop Berdasarkan Wilayah
+                            // Admin: Lihat Bioskop Berdasarkan Wilayah
                             System.out.print("Masukkan Nama Wilayah: ");
                             String wilayahNama = scanner.nextLine();
                     
@@ -175,7 +208,6 @@ public class Main {
                             }
                         }
                         break;
-                    
 
                     default:
                         System.out.println("Tidak ada Pilihan");

@@ -67,4 +67,43 @@ public class Wilayah {
 
         return false;
     }
+
+    // Metode untuk melakukan update nama wilayah
+public static boolean updateWilayah(String namaLama, String namaBaru) {
+    String query = "UPDATE wilayah SET nama = ? WHERE nama = ?";
+
+    try (Connection connection = DatabaseUtil.getConnection();
+         PreparedStatement statement = connection.prepareStatement(query)) {
+
+        statement.setString(1, namaBaru);
+        statement.setString(2, namaLama);
+        int barisDiperbarui = statement.executeUpdate();
+        return barisDiperbarui > 0;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
+
+// Metode untuk menghapus wilayah
+public static boolean deleteWilayah(String namaWilayah) {
+    String query = "DELETE FROM wilayah WHERE nama = ?";
+
+    try (Connection connection = DatabaseUtil.getConnection();
+         PreparedStatement statement = connection.prepareStatement(query)) {
+
+        statement.setString(1, namaWilayah);
+        int barisDihapus = statement.executeUpdate();
+        return barisDihapus > 0;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
+
+
 }
