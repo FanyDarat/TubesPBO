@@ -74,8 +74,10 @@ public class Main {
 
                 if (loggedInUser.getRole() == 1) {
                     System.out.println("3. Tambah Wilayah");
+                    System.out.println("4. Tambah Bioskop");
                 }
 
+                System.out.println("5. Lihat Bioskop Berdasarkan Wilayah");
                 System.out.print("Pilih Opsi di Atas: ");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
@@ -115,6 +117,42 @@ public class Main {
                             }
                         } else {
                             System.out.println("Akses ditolak. Anda tidak memiliki izin.");
+                        }
+                        break;
+
+                    case 4:
+                        if (loggedInUser.getRole() == 1) {
+                            // Tambah Bioskop
+                            System.out.print("Masukkan Nama Bioskop: ");
+                            String namaBioskop = scanner.nextLine();
+                            System.out.print("Masukkan Nama Wilayah: ");
+                            String namaWilayah = scanner.nextLine();
+
+                            boolean bioskopBerhasil = Bioskop.tambahBioskop(namaBioskop, namaWilayah);
+
+                            if (bioskopBerhasil) {
+                                System.out.println("Bioskop berhasil ditambahkan!");
+                            } else {
+                                System.out.println("Gagal menambahkan bioskop. Silakan coba lagi.");
+                            }
+                        } else {
+                            System.out.println("Akses ditolak. Anda tidak memiliki izin.");
+                        }
+                        break;
+
+                    case 5:
+                        // Lihat Bioskop Berdasarkan Wilayah
+                        System.out.print("Masukkan Nama Wilayah: ");
+                        String wilayahNama = scanner.nextLine();
+
+                        List<Bioskop> listBioskop = Bioskop.listBioskopByWilayah(wilayahNama);
+                        System.out.println("Daftar Bioskop di Wilayah " + wilayahNama + ":");
+                        if (listBioskop.isEmpty()) {
+                            System.out.println("Tidak ada bioskop yang terdaftar di wilayah ini.");
+                        } else {
+                            for (Bioskop bioskop : listBioskop) {
+                                System.out.println("- " + bioskop.getNama());
+                            }
                         }
                         break;
 
