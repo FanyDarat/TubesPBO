@@ -95,4 +95,67 @@ public class Bioskop {
             }
         }
     }
+
+    // Method untuk memperbarui nama bioskop berdasarkan nama bioskop dan wilayahnya
+public static boolean updateBioskop(String namaBioskopLama, String namaWilayah, String namaBioskopBaru) {
+    String getWilayahIDQuery = "SELECT id FROM wilayah WHERE nama = ?";
+    String updateBioskopQuery = "UPDATE bioskop SET nama = ? WHERE nama = ? AND wilayahID = ?";
+
+    try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+
+        PreparedStatement getWilayahStatement = connection.prepareStatement(getWilayahIDQuery);
+        getWilayahStatement.setString(1, namaWilayah);
+        ResultSet wilayahResultSet = getWilayahStatement.executeQuery();
+
+        if (wilayahResultSet.next()) {
+            int wilayahID = wilayahResultSet.getInt("id");
+            // Memperbarui nama bioskop
+            PreparedStatement updateBioskopStatement = connection.prepareStatement(updateBioskopQuery);
+            updateBioskopStatement.setString(1, namaBioskopBaru);
+            updateBioskopStatement.setString(2, namaBioskopLama);
+            updateBioskopStatement.setInt(3, wilayahID);
+
+            int rowsAffected = updateBioskopStatement.executeUpdate();
+            return rowsAffected > 0;
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
+
+// Method untuk menghapus bioskop berdasarkan nama bioskop dan wilayahnya
+public static boolean deleteBioskop(String namaBioskop, String namaWilayah) {
+    String getWilayahIDQuery = "SELECT id FROM wilayah WHERE nama = ?";
+    String deleteBioskopQuery = "DELETE FROM bioskop WHERE nama = ? AND wilayahID = ?";
+
+    try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+
+        // Mendapatkan ID wilayah berdasarkan nama wilayah
+        PreparedStatement getWilayahStatement = connection.prepareStatement(getWilayahIDQuery);
+        getWilayahStatement.setString(1, namaWilayah);
+        ResultSet wilayahResultSet = getWilayahStatement.executeQuery();
+
+        if (wilayahResultSet.next()) {
+            int wilayahID = wilayahResultSet.getInt("id");
+
+            // Menghapus bioskop
+            PreparedStatement deleteBioskopStatement = connection.prepareStatement(deleteBioskopQuery);
+            deleteBioskopStatement.setString(1, namaBioskop);
+            deleteBioskopStatement.setInt(2, wilayahID);
+
+            int rowsAffected = deleteBioskopStatement.executeUpdate();
+            return rowsAffected > 0;
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
+
+    
 }

@@ -9,8 +9,7 @@ public class Main {
 
         while (!exit) {
             if (loggedInUser == null) {
-                // Menu sebelum login
-                System.out.println("\nWelcome");
+                System.out.println("\n===== Welcome =====");
                 System.out.println("1. Register");
                 System.out.println("2. Login");
                 System.out.println("3. Exit");
@@ -20,7 +19,6 @@ public class Main {
 
                 switch (choice) {
                     case 1:
-                        // Register
                         System.out.print("Enter Username: ");
                         String username = scanner.nextLine();
                         System.out.print("Enter Email: ");
@@ -36,12 +34,11 @@ public class Main {
                         if (success) {
                             System.out.println("Registration Berhasil!");
                         } else {
-                            System.out.println("Registration Gagal. Please try again.");
+                            System.out.println("Registration Gagal. Silakan coba lagi.");
                         }
                         break;
 
                     case 2:
-                        // Login
                         System.out.print("Enter Username: ");
                         String loginUsername = scanner.nextLine();
                         System.out.print("Enter Password: ");
@@ -63,21 +60,17 @@ public class Main {
                         break;
 
                     default:
-                        System.out.println("Tidak ada Pilihan");
+                        System.out.println("Pilihan tidak valid.");
                         break;
                 }
             } else {
-                // Menu setelah login
-                System.out.println("\nWelcome " + loggedInUser.getUsername());
+                System.out.println("\n===== Menu =====");
                 System.out.println("1. Logout");
                 System.out.println("2. Lihat Semua Wilayah");
-
+                System.out.println("3. Lihat Bioskop Berdasarkan Wilayah");
                 if (loggedInUser.getRole() == 1) {
-                    System.out.println("3. Setting Wilayah");
-                    System.out.println("4. Tambah Bioskop");
-                    System.out.println("5. Lihat Bioskop Berdasarkan Wilayah");
-                } else {
-                    System.out.println("3. Lihat Bioskop Berdasarkan Wilayah");
+                    System.out.println("4. Setting Wilayah");
+                    System.out.println("5. Setting Bioskop");
                 }
 
                 System.out.print("Pilih Opsi di Atas: ");
@@ -103,16 +96,31 @@ public class Main {
                         break;
 
                     case 3:
+                        System.out.print("Masukkan Nama Wilayah: ");
+                        String wilayahNama = scanner.nextLine();
+                        List<Bioskop> listBioskop = Bioskop.listBioskopByWilayah(wilayahNama);
+
+                        System.out.println("Daftar Bioskop di Wilayah " + wilayahNama + ":");
+                        if (listBioskop.isEmpty()) {
+                            System.out.println("Tidak ada bioskop yang terdaftar di wilayah ini.");
+                        } else {
+                            for (Bioskop bioskop : listBioskop) {
+                                System.out.println("- " + bioskop.getNama());
+                            }
+                        }
+                        break;
+
+                    case 4:
                         if (loggedInUser.getRole() == 1) {
-                            System.out.println("\nSetting Wilayah");
+                            System.out.println("\n===== Setting Wilayah =====");
                             System.out.println("1. Tambah Wilayah");
                             System.out.println("2. Update Wilayah");
                             System.out.println("3. Hapus Wilayah");
                             System.out.print("Pilih Opsi: ");
-                            int settingChoice = scanner.nextInt();
+                            int wilayahChoice = scanner.nextInt();
                             scanner.nextLine();
 
-                            switch (settingChoice) {
+                            switch (wilayahChoice) {
                                 case 1:
                                     System.out.print("Masukkan Nama Wilayah: ");
                                     String namaWilayah = scanner.nextLine();
@@ -137,7 +145,7 @@ public class Main {
                                     if (updateBerhasil) {
                                         System.out.println("Wilayah berhasil diupdate!");
                                     } else {
-                                        System.out.println("Gagal mengupdate wilayah. Silakan coba lagi.");
+                                        System.out.println("Gagal mengupdate wilayah.");
                                     }
                                     break;
 
@@ -150,7 +158,7 @@ public class Main {
                                     if (deleteBerhasil) {
                                         System.out.println("Wilayah berhasil dihapus!");
                                     } else {
-                                        System.out.println("Gagal menghapus wilayah. Pastikan wilayah ada dan coba lagi.");
+                                        System.out.println("Gagal menghapus wilayah.");
                                     }
                                     break;
 
@@ -161,45 +169,73 @@ public class Main {
                         }
                         break;
 
-                    case 4:
+                    case 5:
                         if (loggedInUser.getRole() == 1) {
-                            System.out.print("Masukkan Nama Bioskop: ");
-                            String namaBioskop = scanner.nextLine();
-                            System.out.print("Masukkan Nama Wilayah: ");
-                            String namaWilayah = scanner.nextLine();
+                            System.out.println("\n===== Setting Bioskop =====");
+                            System.out.println("1. Tambah Bioskop");
+                            System.out.println("2. Update Bioskop");
+                            System.out.println("3. Delete Bioskop");
+                            System.out.print("Pilih Opsi: ");
+                            int bioskopChoice = scanner.nextInt();
+                            scanner.nextLine();
 
-                            boolean bioskopBerhasil = Bioskop.tambahBioskop(namaBioskop, namaWilayah);
+                            switch (bioskopChoice) {
+                                case 1:
+                                    System.out.print("Masukkan Nama Bioskop: ");
+                                    String namaBioskop = scanner.nextLine();
+                                    System.out.print("Masukkan Nama Wilayah: ");
+                                    String namaWilayah = scanner.nextLine();
 
-                            if (bioskopBerhasil) {
-                                System.out.println("Bioskop berhasil ditambahkan!");
-                            } else {
-                                System.out.println("Gagal menambahkan bioskop. Silakan coba lagi.");
+                                    boolean bioskopBerhasil = Bioskop.tambahBioskop(namaBioskop, namaWilayah);
+
+                                    if (bioskopBerhasil) {
+                                        System.out.println("Bioskop berhasil ditambahkan!");
+                                    } else {
+                                        System.out.println("Gagal menambahkan bioskop.");
+                                    }
+                                    break;
+
+                                case 2:
+                                    System.out.print("Masukkan Nama Wilayah: ");
+                                    String wilayahUpdate = scanner.nextLine();
+                                    System.out.print("Masukkan Nama Bioskop yang ingin diupdate: ");
+                                    String namaBioskopLama = scanner.nextLine();
+                                    System.out.print("Masukkan Nama Baru Bioskop: ");
+                                    String namaBioskopBaru = scanner.nextLine();
+
+                                    boolean updateBioskop = Bioskop.updateBioskop(namaBioskopLama, namaBioskopBaru, wilayahUpdate);
+                                    if (updateBioskop) {
+                                        System.out.println("Bioskop berhasil diupdate!");
+                                    } else {
+                                        System.out.println("Gagal mengupdate bioskop.");
+                                    }
+                                    break;
+
+                                case 3:
+                                    System.out.print("Masukkan Nama Wilayah: ");
+                                    String wilayahDelete = scanner.nextLine();
+                                    System.out.print("Masukkan Nama Bioskop yang ingin dihapus: ");
+                                    String namaBioskopHapus = scanner.nextLine();
+
+                                    boolean deleteBioskop = Bioskop.deleteBioskop(namaBioskopHapus, wilayahDelete);
+                                    if (deleteBioskop) {
+                                        System.out.println("Bioskop berhasil dihapus!");
+                                    } else {
+                                        System.out.println("Gagal menghapus bioskop.");
+                                    }
+                                    break;
+
+                                default:
+                                    System.out.println("Pilihan tidak valid.");
+                                    break;
                             }
                         } else {
                             System.out.println("Akses ditolak. Anda tidak memiliki izin.");
                         }
                         break;
 
-                    case 5:
-                        if (loggedInUser.getRole() == 1) {
-                            System.out.print("Masukkan Nama Wilayah: ");
-                            String wilayahNama = scanner.nextLine();
-                    
-                            List<Bioskop> listBioskop = Bioskop.listBioskopByWilayah(wilayahNama);
-                            
-                            System.out.println("Daftar Bioskop di Wilayah " + wilayahNama + ":");
-                            if (listBioskop.isEmpty()) {
-                                System.out.println("Tidak ada bioskop yang terdaftar di wilayah ini.");
-                            } else {
-                                for (Bioskop bioskop : listBioskop) {
-                                    System.out.println("- " + bioskop.getNama());
-                                }
-                            }
-                        }
-                        break;
-
                     default:
-                        System.out.println("Tidak ada Pilihan");
+                        System.out.println("Pilihan tidak valid.");
                         break;
                 }
             }
