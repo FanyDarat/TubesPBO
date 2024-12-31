@@ -26,7 +26,7 @@ public class Main {
                     System.out.print("Enter Telepon: ");
                     String telepon = scanner.nextLine();
 
-                    User newUser = new User(0, username, email, password, telepon);
+                    User newUser = new User(0, username, email, password, telepon, 0);
                     boolean success = newUser.registerUser(username, email, password, telepon);
 
                     if (success) {
