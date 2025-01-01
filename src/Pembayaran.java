@@ -1,3 +1,3 @@
 public interface Pembayaran {
-    void prosesPembayaran(Film film);
+    void prosesPembayaran(int filmID);
 }

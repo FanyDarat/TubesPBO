@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class User implements DatabaseUtil {
+public class User extends DatabaseUtil {
     private int userID;
     private String username;
     private String email;
@@ -66,6 +66,20 @@ public class User implements DatabaseUtil {
             System.err.println("SQL Error during login: " + e.getMessage());
         }
         return null;
+    }
+
+    public void topUpSaldo(double jumlahSaldo) {
+        String query = "UPDATE user SET saldo = saldo + ? WHERE id = ?";
+        try (Connection connection = new User(0, null, null, null, null, 0).getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setDouble(1, jumlahSaldo);
+            preparedStatement.setInt(2, userID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQL Error during top-up: " + e.getMessage());
+        }
+
     }
 
     public String getUsername() {

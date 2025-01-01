@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Wilayah implements DatabaseUtil {
+public class Wilayah extends DatabaseUtil {
 
     private int wilayahID;
     private String nama;
