@@ -5,19 +5,13 @@ import java.util.List;
 
 public class Jadwal extends DatabaseUtil {
     private int jadwalID;
-    private int bioskopID;
     private int filmID;
-    private LocalDateTime waktuTayang;
-    private double harga;
-    private List<Tiket> listTiket;
+    private String waktuTayang;
 
-    public Jadwal(int jadwalID, int bioskopID, int filmID, LocalDateTime waktuTayang, double harga) {
+    public Jadwal(int jadwalID,int filmID, String waktuTayang) {
         this.jadwalID = jadwalID;
-        this.bioskopID = bioskopID;
         this.filmID = filmID;
         this.waktuTayang = waktuTayang;
-        this.harga = harga;
-        this.listTiket = new ArrayList<>();
     }
 
     // Getter and Setter methods
@@ -25,79 +19,120 @@ public class Jadwal extends DatabaseUtil {
         return jadwalID;
     }
 
-    public int getBioskopID() {
-        return bioskopID;
-    }
-
     public int getFilmID() {
         return filmID;
     }
 
-    public LocalDateTime getWaktuTayang() {
+    public String getWaktuTayang() {
         return waktuTayang;
     }
 
-    public double getHarga() {
-        return harga;
-    }
-
-    public List<Tiket> getListTiket() {
-        return listTiket;
-    }
-
-    public void updateJadwal(LocalDateTime waktuTayang, double harga) {
+    public void updateJadwal(String waktuTayang) {
         this.waktuTayang = waktuTayang;
-        this.harga = harga;
     }
 
-    // Retrieve Jadwal records filtered by bioskopID
-    public List<Jadwal> filterByBioskop(int bioskopID) {
-        List<Jadwal> result = new ArrayList<>();
-        String query = "SELECT * FROM jadwal WHERE bioskopID = ?";
+    public List<String> getKursiTersedia() {
+        List<String> listKursi = new ArrayList<>();
 
+        String query = "SELECT * FROM tiket WHERE jadwalID = ?";
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-            preparedStatement.setInt(1, bioskopID);
+            // Menyisipkan nilai ke dalam query
+            preparedStatement.setInt(1, jadwalID);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                result.add(mapResultSetToJadwal(resultSet));
+                listKursi.add(resultSet.getString("nomor_kursi"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return result;
+
+        return listKursi;
+
     }
 
-    // Retrieve Jadwal records filtered by filmID
-    public List<Jadwal> filterByFilm(int filmID) {
-        List<Jadwal> result = new ArrayList<>();
-        String query = "SELECT * FROM jadwal WHERE filmID = ?";
+    public static boolean tambahJadwal(String waktuTayang, String namaFilm, String namaWilayah, String namaBioskop) {
+        String queryWilayah = "SELECT id FROM wilayah WHERE nama = ?";
+        String queryBioskop = "SELECT id FROM bioskop WHERE nama = ? AND wilayahID = ?";
+        String queryFilm = "SELECT id FROM film WHERE bioskopID = ? AND nama = ?";
+        String query = "INSERT INTO jadwal (waktu_tayang, filmID) VALUES (?, ?)";
 
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = getConnectionStatic();
+            PreparedStatement psWilayah = connection.prepareStatement(queryWilayah)) {
+    
+            // Cari wilayahID berdasarkan namaWilayah
+            psWilayah.setString(1, namaWilayah);
+            ResultSet rsWilayah = psWilayah.executeQuery();
 
-            preparedStatement.setInt(1, filmID);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            if (rsWilayah.next()) {
+                int wilayahID = rsWilayah.getInt("id");
+                PreparedStatement psBioskop = connection.prepareStatement(queryBioskop);
+                psBioskop.setString(1, namaBioskop);
+                    psBioskop.setInt(2, wilayahID);
+                    ResultSet rsBioskop = psBioskop.executeQuery();
 
-            while (resultSet.next()) {
-                result.add(mapResultSetToJadwal(resultSet));
+                    if (rsBioskop.next()) {
+                        int bioskopID = rsBioskop.getInt("id");
+                        PreparedStatement psFilm = connection.prepareStatement(queryFilm);
+                        psFilm.setInt(1, bioskopID);
+                        psFilm.setString(2, namaFilm);
+                        ResultSet rsFilm = psFilm.executeQuery();
+
+                        if (rsFilm.next()) {
+                            int filmID = rsFilm.getInt("id");
+                            PreparedStatement statement = connection.prepareStatement(query);
+               
+                           statement.setString(1, waktuTayang);
+                           statement.setInt(2, filmID);
+    
+                           int barisDimasukkan = statement.executeUpdate();
+                           return barisDimasukkan > 0;
+                        }
+                    }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return result;
+
+        return false;
     }
 
-    // Helper method to map a ResultSet to a Jadwal object
-    private Jadwal mapResultSetToJadwal(ResultSet resultSet) throws SQLException {
-        int jadwalID = resultSet.getInt("jadwalID");
-        int bioskopID = resultSet.getInt("bioskopID");
-        int filmID = resultSet.getInt("filmID");
-        LocalDateTime waktuTayang = resultSet.getTimestamp("waktuTayang").toLocalDateTime();
-        double harga = resultSet.getDouble("harga");
+    public static boolean updateJadwal(int jadwalID, String waktu_tayang) {
+        String query = "UPDATE jadwal SET waktu_tayang = ? WHERE id = ?";
 
-        return new Jadwal(jadwalID, bioskopID, filmID, waktuTayang, harga);
+        try (Connection connection =getConnectionStatic();
+            PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, waktu_tayang);
+            statement.setInt(2, jadwalID);
+            int barisDiperbarui = statement.executeUpdate();
+            return barisDiperbarui > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
+
+    public static boolean deleteJadwal(int jadwalID) {
+        String query = "DELETE FROM jadwal WHERE id = ?";
+
+        try (Connection connection = getConnectionStatic();
+            PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, jadwalID);
+            int barisDihapus = statement.executeUpdate();
+            return barisDihapus > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

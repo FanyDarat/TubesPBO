@@ -8,6 +8,7 @@ public class Film extends DatabaseUtil {
     private String genre;
     private int durasi;
     private double harga;
+    private ArrayList<Jadwal> listJadwal;
 
     // Constructor
     public Film(int filmID, String namaFilm, String genre, int durasi, double harga) {
@@ -46,7 +47,7 @@ public class Film extends DatabaseUtil {
         String queryBioskop = "SELECT id FROM bioskop WHERE nama = ? AND wilayahID = ?";
         String queryFilm = "INSERT INTO film (nama, genre, durasi, price, bioskopID) VALUES (?, ?, ?, ?, ?)";
     
-        try (Connection connection = new Film(0, null, null, 0, 0).getConnection();
+        try (Connection connection = getConnectionStatic();
              PreparedStatement psWilayah = connection.prepareStatement(queryWilayah)) {
     
             // Cari wilayahID berdasarkan namaWilayah
@@ -93,7 +94,27 @@ public class Film extends DatabaseUtil {
         return false;
     }
     
-    
+    public List<Jadwal> getJadwal() {
+        List<Jadwal> listJadwal = new ArrayList<>();
+        String query = "SELECT * FROM jadwal WHERE filmID = ?";
+
+        try (Connection connection = new Film(0, null, null, 0, 0).getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, filmID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int jadwalID = resultSet.getInt("id");
+                String waktu_tayang  = resultSet.getString("waktu_tayang");
+                listJadwal.add(new Jadwal(jadwalID, filmID, waktu_tayang));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listJadwal;
+    }
 
     // Method to update an existing film
     public static boolean updateFilm(
@@ -160,7 +181,6 @@ public class Film extends DatabaseUtil {
         List<Film> films = new ArrayList<>();
         String query = "SELECT f.id, f.nama, f.genre, f.durasi, f.price " +
                        "FROM film f " +
-                       "JOIN jadwal j ON f.id = j.filmID " +
                        "JOIN bioskop b ON f.bioskopID = b.id " +
                        "JOIN wilayah w ON b.wilayahID = w.id " +
                        "WHERE b.nama = ? AND w.nama = ?";
