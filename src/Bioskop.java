@@ -2,13 +2,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bioskop {
+public class Bioskop extends DatabaseUtil {
     private int bioskopID;
     private String nama;
     private int wilayahID;
-    private static final String URL = "jdbc:mysql://mysql-703314b-rafaelabednego123-d6c9.e.aivencloud.com:14376/tubespbo";
-    private static final String USER = "avnadmin";
-    private static final String PASSWORD = "AVNS_tDl-qGjjb2oSl3y_i0m";
+    
 
     public Bioskop(int bioskopID, String nama, int wilayahID) {
         this.bioskopID = bioskopID;
@@ -35,7 +33,7 @@ public class Bioskop {
                        "JOIN wilayah w ON b.wilayahID = w.id " +
                        "WHERE w.nama = ?";
 
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = getConnectionStatic();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, wilayahNama);
@@ -61,7 +59,7 @@ public class Bioskop {
         String getWilayahIDQuery = "SELECT id FROM wilayah WHERE nama = ?";
         String insertBioskopQuery = "INSERT INTO bioskop (nama, wilayahID) VALUES (?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+        try (Connection connection = getConnectionStatic()) {
 
             PreparedStatement getWilayahStatement = connection.prepareStatement(getWilayahIDQuery);
             getWilayahStatement.setString(1, namaWilayah);
@@ -101,7 +99,7 @@ public static boolean updateBioskop(String namaBioskopLama, String namaWilayah, 
     String getWilayahIDQuery = "SELECT id FROM wilayah WHERE nama = ?";
     String updateBioskopQuery = "UPDATE bioskop SET nama = ? WHERE nama = ? AND wilayahID = ?";
 
-    try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+    try (Connection connection = getConnectionStatic()) {
 
         PreparedStatement getWilayahStatement = connection.prepareStatement(getWilayahIDQuery);
         getWilayahStatement.setString(1, namaWilayah);
@@ -131,7 +129,7 @@ public static boolean deleteBioskop(String namaBioskop, String namaWilayah) {
     String getWilayahIDQuery = "SELECT id FROM wilayah WHERE nama = ?";
     String deleteBioskopQuery = "DELETE FROM bioskop WHERE nama = ? AND wilayahID = ?";
 
-    try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+    try (Connection connection = getConnectionStatic()) {
 
         // Mendapatkan ID wilayah berdasarkan nama wilayah
         PreparedStatement getWilayahStatement = connection.prepareStatement(getWilayahIDQuery);

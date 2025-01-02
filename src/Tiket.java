@@ -1,4 +1,4 @@
-public class Tiket extends DatabaseUtil {
+public class Tiket {
     private int tiketID;
     private int userID;
     private int jadwalID;
